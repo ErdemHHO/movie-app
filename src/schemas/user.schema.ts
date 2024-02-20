@@ -16,7 +16,7 @@ export const UserSchema = new EntitySchema<User>({
     lastName: {
       type: String,
     },
-    CreatedAt: {
+    createdAt: {
       type: Date,
       default: new Date(),
     },
@@ -25,6 +25,9 @@ export const UserSchema = new EntitySchema<User>({
       unique: true,
     },
     password: {
+      type: String,
+    },
+    role: {
       type: String,
     },
   },

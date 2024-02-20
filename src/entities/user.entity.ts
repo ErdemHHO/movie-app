@@ -6,17 +6,20 @@ export class User {
   id: number;
 
   @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
-
-  @Column({ default: new wDate() })
-  CreatedAt: Date;
+  email: string;
 
   @Column()
   password: string;
 
   @Column()
-  email: string;
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column({ default: "user" })
+  role: string;
+
+  @Column({ default: new Date() })
+  createdAt: Date;
 }
