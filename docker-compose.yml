@@ -1,0 +1,13 @@
+version: '3.8'
+volumes:
+  nestjs-template_postgres: {}
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16-alpine
+    ports:
+      - '5432:5432'
+    volumes:
+      - nestjs-template_postgres:/data/postgres
+    env_file:
+      - docker.env
