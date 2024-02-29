@@ -29,7 +29,7 @@ export class AuthService {
         .status(HttpStatus.BAD_REQUEST)
         .json({ message: "Password is wrong" });
 
-    const payload = { id: user.id, email: user.email };
+    const payload = { id: user.id, email: user.email, role: user.role }; // Role bilgisini payload'a ekleyin
     return res.status(HttpStatus.ACCEPTED).json({
       access_token: await this.jwtService.signAsync(payload),
     });

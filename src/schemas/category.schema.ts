@@ -1,4 +1,4 @@
-import { Category } from "src/entities/category.entity";
+import { Category } from "src/category/entities/category.entity";
 import { EntitySchema } from "typeorm";
 
 export const CategorySchema = new EntitySchema<Category>({
@@ -10,7 +10,7 @@ export const CategorySchema = new EntitySchema<Category>({
       primary: true,
       generated: true,
     },
-    categoryName: {
+    name: {
       type: String,
     },
   },

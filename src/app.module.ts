@@ -4,9 +4,10 @@ import { AppService } from "./app.service";
 import { UserModule } from "./user/user.module";
 import { AuthModule } from "./auth/auth.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "./entities/user.entity";
+import { User } from "./user/entities/user.entity";
 import { HttpModule } from "@nestjs/axios";
 import { CategoryModule } from "./category/category.module";
+import postgres from "postgres";
 
 @Module({
   imports: [
@@ -16,11 +17,11 @@ import { CategoryModule } from "./category/category.module";
     CategoryModule,
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: process.env.POSTGRES_HOST,
+      host: "localhost",
       port: 5432,
       username: "postgres",
-      password: "123",
-      database: process.env.POSTGRES_DB,
+      password: "postgres",
+      database: "postgres",
       entities: [User],
       synchronize: true,
       autoLoadEntities: true,

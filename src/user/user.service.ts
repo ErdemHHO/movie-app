@@ -1,10 +1,10 @@
 import { HttpStatus, Injectable, Res } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "../entities/user.entity";
+import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
-import { CreateUserParams } from "src/utils/types";
 import * as bcrypt from "bcrypt";
 import { Response } from "express";
+import { CreateUserDto } from "./dtos/createUser.dto";
 
 @Injectable()
 export class UserService {
@@ -16,44 +16,43 @@ export class UserService {
   getUsers(): Promise<User[]> {
     return this.usersRepository.find();
   }
-
-  //Create User
-  async createUser(dto: CreateUserParams, @Res() res: Response) {
+  async createUser(dto: CreateUserDto, @Res() res: Response) {
     const user = await this.usersRepository.findOne({
       where: { email: dto.email },
     });
 
-    console.log(user);
-
-    if (user)
+    if (user) {
       return res
         .status(HttpStatus.BAD_REQUEST)
-        .json({ message: "Email already exist" });
-
-    if (dto.password != dto.confirmPassword) {
-      return res
-        .status(HttpStatus.BAD_REQUEST)
-        .json({ message: "Passwords are not same" });
+        .json({ message: "Email already exists" });
     }
 
-    console.log("Parola kontrolü geçti");
+    if (dto.password !== dto.confirmPassword) {
+      return res
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ message: "Passwords do not match" });
+    }
 
     const hashedPassword = await bcrypt.hash(dto.password, 12);
 
-    console.log("Password hashed");
-
-    const newUser = await this.usersRepository.create({
-      ...dto,
+    const newUser = this.usersRepository.create({
+      email: dto.email,
       password: hashedPassword,
-      createdAt: new Date(),
-      role: dto.role || "user",
+      role: dto.role,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
     });
 
-    await this.usersRepository.save(newUser);
-
-    return res
-      .status(HttpStatus.CREATED)
-      .json({ message: "User saved", newUser });
+    try {
+      await this.usersRepository.save(newUser);
+      return res
+        .status(HttpStatus.CREATED)
+        .json({ message: "User saved", newUser });
+    } catch (error) {
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: "Error occurred while saving user" });
+    }
   }
 
   async findUser(email: string): Promise<User | undefined> {
