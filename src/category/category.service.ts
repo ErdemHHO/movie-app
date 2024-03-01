@@ -14,14 +14,16 @@ export class CategoryService {
   ) {}
   
 
-  create (createCategoryDto: CreateCategoryDto) {
-    const findCategory = this.categoriesRepository.findOneBy({name: createCategoryDto.name});
+  async create (createCategoryDto: CreateCategoryDto) {
+    const findCategory = await this.categoriesRepository.findOne({where:{name: createCategoryDto.name}});
+
+    console.log(findCategory);
 
     if (findCategory) {
       throw new BadRequestException('Category already exists');
     }
 
-    const category = this.categoriesRepository.create(createCategoryDto);
+    const category =await this.categoriesRepository.create(createCategoryDto);
     return this.categoriesRepository.save(category);
   }
 
