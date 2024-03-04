@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Review } from 'src/review/entities/review.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -20,6 +21,6 @@ export class User {
   @Column({ default: new Date() })
   createdAt: Date;
 
-  @Column({ default: "user" })
+  @Column({ default: 'user' })
   role: string;
 }
