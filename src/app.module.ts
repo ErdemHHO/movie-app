@@ -13,6 +13,9 @@ import { Category } from './category/entities/category.entity';
 import { Movie } from './movie/entities/movie.entity';
 import { Review } from './review/entities/review.entity';
 import { ReviewModule } from './review/review.module';
+import { ProductModule } from './product/product.module';
+import { APP_FILTER } from '@nestjs/core';
+import { GenericResponseErrMsg } from './user/generic-response-err-msg.exception';
 
 @Module({
   imports: [
@@ -34,8 +37,15 @@ import { ReviewModule } from './review/review.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    ProductModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: GenericResponseErrMsg,
+    },
+  ],
 })
 export class AppModule {}

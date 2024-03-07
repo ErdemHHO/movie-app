@@ -25,6 +25,7 @@ export class Movie {
   image_url: string;
 
   @ManyToOne(() => Category, (category) => category.id)
+  //   @ManyToOne(() => Category, order => order.order_lines, { eager: true })
   category: Category;
 
   @OneToMany(() => Review, (review) => review.movie)
